@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Boards.Huxley", "Bytewizer.TinyCLR.Boards.Huxley\Bytewizer.TinyCLR.Boards.Huxley.csproj", "{D35885AE-72F8-4DEE-969E-8F3D1C7C25FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Ubidots", "Bytewizer.TinyCLR.Ubidots\Bytewizer.TinyCLR.Ubidots.csproj", "{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D35885AE-72F8-4DEE-969E-8F3D1C7C25FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35885AE-72F8-4DEE-969E-8F3D1C7C25FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35885AE-72F8-4DEE-969E-8F3D1C7C25FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35885AE-72F8-4DEE-969E-8F3D1C7C25FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2680EF6F-366E-4B3E-BBE9-CA7C9EDEDDFD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D07F15E9-05BC-4BA3-B420-D39A11130444}
+	EndGlobalSection
+EndGlobal
