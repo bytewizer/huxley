@@ -195,7 +195,8 @@ namespace Bytewizer.TinyCLR.Boards.Huxley
                 // Sample GPS location
                 request = new JsonRequest("card.location.mode");
                 request.Add("mode", "periodic");
-                request.Add("vseconds", "usb:1800;high:3600;normal:7200;low:43200;dead:0");
+                request.Add("seconds", 60);
+                //request.Add("vseconds", "usb:1800;high:3600;normal:7200;low:43200;dead:0");
 
                 _notecard.Request(request).EnsureSuccess();
 
@@ -205,6 +206,7 @@ namespace Bytewizer.TinyCLR.Boards.Huxley
                 request.Add("heartbeat", true);
                 request.Add("hours", 12);
                 request.Add("file", "_track.qo");
+                request.Add("sync", true);
 
                 _notecard.Request(request).EnsureSuccess();
 

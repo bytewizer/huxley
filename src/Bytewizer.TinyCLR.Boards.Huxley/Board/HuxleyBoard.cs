@@ -31,7 +31,7 @@
                 _statusDevice = StatusLedDevice.Initialize();
 
                 // Register device if not allready registered
-                NoteHubRegister();
+                NotehubRegister();
             }
             catch
             {
@@ -83,7 +83,7 @@
 
         #region Private Methods   
 
-        public bool NoteHubRegister()
+        public bool NotehubRegister()
         {            
             if (!_notecardDevice.IsRegistered(ProductUID))
             {                  

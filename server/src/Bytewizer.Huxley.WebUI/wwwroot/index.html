@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>GPS Tracking - Assets Tracker</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        const center = [-117.736656, 33.853195];
+        mapboxgl.accessToken = "pk.eyJ1IjoidC1yaWNlIiwiYSI6ImNsMHpnYjJ1bzByeTMzaWsxbHZhbHcxOWMifQ.1zN-zkLhmEVZj3QjTRn0lA";
+
+        const transformRequest = (url, resourceType) => {
+            const isMapboxRequest =
+                url.slice(8, 22) === "api.mapbox.com" ||
+                url.slice(10, 26) === "tiles.mapbox.com";
+            return {
+                url: isMapboxRequest
+                    ? url.replace("?", "?pluginName=ATSolution&")
+                    : url
+            };
+        };
+
+        const map = new mapboxgl.Map({
+            container: "map",
+            style: "mapbox://styles/mapbox/streets-v11",
+            center: center,
+            zoom: 15,
+            transformRequest: transformRequest
+        });
+
+        map.on('load', () => {
+
+            map.addSource("currentPosition", {
+                type: "geojson",
+                data: {
+                    type: "FeatureCollection",
+                    features: [],
+                }
+            });
+
+            map.addLayer({
+                id: "currentPosition",
+                type: "circle",
+                source: "currentPosition",
+                paint: {
+                    "circle-color": [
+                        "case",
+                        [">", ["get", "speed"], 90],
+                        "red",
+                        "blue"
+                    ],
+                    "circle-radius": [
+                        "interpolate",
+                        ["exponential", 1.2],
+                        ["zoom"],
+                        0,
+                        5,
+                        16,
+                        10
+                    ],
+                    "circle-stroke-color": "white",
+                    "circle-stroke-width": [
+                        "interpolate",
+                        ["exponential", 1.2],
+                        ["zoom"],
+                        0,
+                        1,
+                        16,
+                        3
+                    ]
+                }
+            });
+
+            openWebSockets(map);
+        });
+
+        let selectedId = 0;
+
+        map.on("mousemove", popupHandler);
+        map.on("click", popupHandler);
+
+        // Create a popup showing asset metadata on mouse hover
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+        function openWebSockets(map) {
+            if ("WebSocket" in window) {
+
+                var ws = new WebSocket('ws://192.168.1.71:5057/ws');
+
+                ws.onopen = function () {
+                    console.log("WS Open...");
+                };
+
+                ws.onmessage = function (event) {
+                    var geojson = JSON.parse(event.data);
+                    map.getSource('currentPosition').setData(geojson);
+                };
+
+                ws.onerror = function (error) {
+                    console.log('Websocket error: ');
+                    console.log(error);
+                }
+
+                ws.onclose = function () {
+                    console.log("Connection is closed...");
+                };
+
+            } else {
+                alert("WebSocket NOT supported by your Browser!");
+            }
+        }
+
+        function popupHandler(e) {
+            const features = map.queryRenderedFeatures(e.point, {
+                layers: ["currentPosition"]
+            });
+
+            if (!features.length) {
+                map.getCanvas().style.cursor = "";
+                map.removeFeatureState({
+                    source: "currentPosition",
+                    id: selectedId
+                });
+                popup.remove();
+                return;
+            }
+            const f = features[0];
+            selectedId = f.id;
+            map.getCanvas().style.cursor = "pointer";
+
+            const coordinates = f.geometry.coordinates.slice();
+            const id = f.properties.id;
+            const location = f.properties.location;
+            const timestamp = new Date(f.properties.timestamp).toISOString();
+            const text =
+                `<h4>Asset Detail </h4> <ul>` +
+                `<li><b>Asset ID</b>: ${id} </li>` +
+                `<li><b>Timestamp:</b> ${timestamp} </li>` +
+                `<li><b>Location</b>: ${location} </li> </ul>`;
+
+            map.setFeatureState(
+                {
+                    source: "currentPosition",
+                    id: selectedId
+                },
+                {
+                    hover: true
+                }
+            );
+
+            popup
+                .setLngLat(coordinates)
+                .setHTML(text)
+                .addTo(map);
+        }
+    </script>
+</body>
+</html>

@@ -13,7 +13,14 @@ namespace Bytewizer.TinyCLR.Boards.Huxley
             var results = source.Request(noteRequest);
             if (results.IsSuccess)
             {
-                return JsonConverter.DeserializeObject(results.Response, type);
+                try
+                {
+                    return JsonConverter.DeserializeObject(results.Response, type);
+                }
+                catch
+                {
+                    return null;
+                }
             }
 
             return null;
